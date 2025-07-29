@@ -1,3 +1,5 @@
+# https://adventofcode.com/2024/day/4#part2
+
 from input import input
 
 count = 0
