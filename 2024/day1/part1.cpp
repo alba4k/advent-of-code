@@ -1,8 +1,8 @@
 // https://adventofcode.com/2024/day/1
 
+#include <cmath>
 #include <iostream>
 #include <string>
-#include <cmath>
 
 #include "inputs.hpp"
 

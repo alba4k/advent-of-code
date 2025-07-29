@@ -1,5 +1,5 @@
-#include <vector>
 #include <array>
+#include <vector>
 
 std::vector<std::array<int, 2>> inputs = {
     {88159, 51481},
