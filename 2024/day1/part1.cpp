@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "inputs.hpp"
+#include "input.hpp"
 
 // terrible but works
 void sort(std::vector<int> &v) {
@@ -20,21 +20,21 @@ void sort(std::vector<int> &v) {
 }
 
 int main() {
-    std::vector<int> inputs1;
-    std::vector<int> inputs2;
+    std::vector<int> input1;
+    std::vector<int> input2;
 
-    for(std::array<int, 2> i : inputs) {
-        inputs1.push_back(i[0]);
-        inputs2.push_back(i[1]);
+    for(std::array<int, 2> i : input) {
+        input1.push_back(i[0]);
+        input2.push_back(i[1]);
     }
 
-    sort(inputs1);
-    sort(inputs2);
+    sort(input1);
+    sort(input2);
 
     int distance = 0;
 
-    for(int i = 0; i < inputs1.size(); ++i)
-        distance += abs(inputs1[i] - inputs2[i]);
+    for(int i = 0; i < input1.size(); ++i)
+        distance += abs(input1[i] - input2[i]);
 
     std::cout << "The total distance is " << distance << std::endl;
 

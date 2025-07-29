@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "inputs.h"
+#include "input.h"
 
 enum Status {
     Increasing = 0,
@@ -17,7 +17,7 @@ enum Status {
 int main() {
     enum Status status;
     bool safe;
-    char *levelStart = inputs, *levelEnd, *reportEnd;
+    char *levelStart = input, *levelEnd, *reportEnd;
     int firstLevel, secondLevel;
     int safeReports = 0;
 

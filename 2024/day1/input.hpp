@@ -1,7 +1,7 @@
 #include <array>
 #include <vector>
 
-std::vector<std::array<int, 2>> inputs = {
+std::vector<std::array<int, 2>> input = {
     {88159, 51481},
     {66127, 31794},
     {71500, 84893},
