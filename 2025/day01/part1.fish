@@ -22,6 +22,6 @@ while read -l line
         set count (math "$count + 1")
     end
     echo $number
-end < input.txt
+end < input
 
 echo $count
