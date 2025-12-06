@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct Range {
+typedef struct {
     long min;
     long max;
-};
+} Range;
 
 int main() {
     FILE *fp = fopen("input", "r");
@@ -21,18 +21,15 @@ int main() {
     fseek(fp, 0, SEEK_SET);
 
     char *input = malloc(len);
-    if(input == NULL) {
-        perror("malloc");
+    if(input == NULL)
         return -1;
-    }
+        
     size_t read = fread(input, sizeof(*input), len, fp);
     fclose(fp);
     if(read > 0)
         input[read - 1] = 0;
-    else {
-        fprintf(stderr, "fread() failed: %zu\n", read);
+    else
         return 2;
-    }
 
     char *ranges_str = input;
     char *values_str = strstr(input, "\n\n") + 2;
@@ -46,7 +43,7 @@ int main() {
     ptr = values_str;
     while((ptr = strchr(ptr, '\n'))) {values_count++; ptr++;}
 
-    struct Range ranges[ranges_count];
+    Range ranges[ranges_count];
     long values[values_count];
 
     ptr = ranges_str;

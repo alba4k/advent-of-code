@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,30 +7,45 @@ typedef struct {
     long max;
 } Range;
 
-long max(long a, long b) {
-    return (a >= b)*a + (b > a)*b;
-}
-long min(long a, long b) {
-    return (a <= b)*a + (b > a)*b;
+int compareRanges(const void *a, const void *b) {
+    Range r1 = *(Range *)a;
+    Range r2 = *(Range *)b;
+
+    if(r1.min < r2.min) return -1;
+    if(r1.min > r2.min) return 1;
+    if(r1.max < r2.max) return -1;
+    if(r1.max > r2.max) return 1;
+    return 0;
 }
 
-Range intersection(Range a, Range b) {
-    long max_start = max(a.min, b.min);
-    long min_end = min(a.max, b.max);
-    if(max_start > min_end) {
-        max_start = -1;
-        min_end = -1;
+size_t mergeRanges(Range *ranges, size_t count) {
+    if(count == 0) return 0;
+
+    qsort(ranges, count, sizeof(Range), compareRanges);
+
+    Range *merged_ranges = malloc(count*sizeof(Range));
+    if(merged_ranges == NULL)
+        exit(1);
+    
+    merged_ranges[0] = ranges[0];
+    size_t merged_count = 1;
+
+    for(size_t i = 1; i < count; i++) {
+        //                  &merged_ranges[merged_count-1];
+        Range *lastMerged = merged_ranges + merged_count - 1;
+        Range current = ranges[i];
+
+        if(current.min <= lastMerged->max + 1) {
+            if(current.max > lastMerged->max)
+                lastMerged->max = current.max;
+        } else
+            merged_ranges[merged_count++] = current;
     }
 
-    Range result = {
-        min: max_start,
-        max: min_end
-       };
-    return result;
-}
+    memcpy(ranges, merged_ranges, merged_count*sizeof(Range));
+    free(merged_ranges);
 
-bool isInRange(long n, Range r) {
-    return r.min <= n && n <= r.max;
+    return merged_count;
 }
 
 int main() {
@@ -47,18 +61,15 @@ int main() {
     fseek(fp, 0, SEEK_SET);
 
     char *input = malloc(len);
-    if(input == NULL) {
-        perror("malloc");
+    if(input == NULL)
         return -1;
-    }
+
     size_t read = fread(input, sizeof(*input), len, fp);
     fclose(fp);
     if(read > 0)
         input[read - 1] = 0;
-    else {
-        fprintf(stderr, "fread() failed: %zu\n", read);
+    else
         return 2;
-    }
 
     char *ranges_str = input;
     char *ptr = strstr(input, "\n\n");
@@ -73,40 +84,24 @@ int main() {
 
     ptr = ranges_str;
     for(int i = 0; i < ranges_count; i++) {
-        char *end = strchr(ptr, '\n');
-        if(end) *end = 0;
-        char *start1 = ptr;
-        char *mid = strchr(start1, '-');
+        char *max = strchr(ptr, '\n');
+        if(max) *max = 0;
+        char *min1 = ptr;
+        char *mid = strchr(min1, '-');
         *mid = 0; // unchecked but stfu
-        char *start2 = mid+1;
-        ranges[i].min = atol(start1);
-        ranges[i].max = atol(start2);
-        ptr = end+1;
+        char *min2 = mid+1;
+        ranges[i].min = atol(min1);
+        ranges[i].max = atol(min2);
+        ptr = max+1;
     }
 
-    long count = 2;
-    // remove duplicates
-    for(int i = 0; i < ranges_count; i++) {
-        for(int j = i+1; j < ranges_count; j++) { // this could be done better but who cares
-            if(ranges[j].min == -1) continue;
-            Range in = intersection(ranges[i], ranges[j]);
-            if(in.min == -1) continue;
+    size_t merged_count = mergeRanges(ranges, ranges_count);
 
-            if(isInRange(ranges[i].min, in)) {
-                
-            };
-            if(isInRange(ranges[j].min, in));
-            if(isInRange(ranges[i].max, in));
-            if(isInRange(ranges[j].max, in));
-        }
-    }
-
-    for(int i = 0; i < ranges_count; i++) {
-        printf("%ld - %ld\n", ranges[i].min, ranges[i].max);
-        if(ranges[i].max != -1) count += (ranges[i].max - ranges[i].min) + 1;
-    }
-
-    printf("%ld\n", count);
+    long total = 0;
+    for(size_t i = 0; i < merged_count; i++)
+        total += ranges[i].max - ranges[i].min + 1;
+    
+    printf("%ld\n", total);
 
     return 0;
 }
