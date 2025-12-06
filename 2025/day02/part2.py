@@ -24,7 +24,7 @@ def repeatsPattern(number: str) -> bool:
 sum: int = 0
 
 with open("input", "r") as file:
-    input = file.read()
+    input: str = file.read()
 
 ranges: list[str] = input.split(",")
 
