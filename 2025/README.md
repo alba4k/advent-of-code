@@ -5,3 +5,5 @@ Completed:
 * day4: c++
 * day5: c
 * day6: python
+* day7: java
+* day8: java
