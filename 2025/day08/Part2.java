@@ -132,13 +132,6 @@ public class Part2 {
         DSU dsu = new DSU(nodes);
         Edge last_edge = null;
 
-        for (Edge edge : allEdges) {
-            if (dsu.union(edge.u, edge.v))
-                last_edge = edge;
-            
-            if (dsu.components == 1)
-                break;
-        }
 
         // not checking last_edge
         long x1 = last_edge.u.x;
