@@ -1,6 +1,6 @@
 #!/bin/fish
 
-# input should be in input.txt
+# input should be in input
 
 set number 50
 set count 0
@@ -25,6 +25,6 @@ while read -l line
         case '*'
             exit 1
     end
-end < input.txt
+end < input
 
 echo $count
